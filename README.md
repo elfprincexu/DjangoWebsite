@@ -1,6 +1,10 @@
 Brief summary:
 
-  1. a basic blog Django project, which enables
+snapshots: 
+
+![Alt text](screenshots/home.png "Home Page")
+
+  1. A basic blog Django project, which enables
         Creation/View/Edit/Delete blogs.
         Comments thread
         Accounts: login, register, logout
@@ -25,5 +29,3 @@ Url mappings:
   5.    /blogs/[1-9]/delete ---------- blog delete
   6.    /blogs/create ---------------- blog creation
   
-snapshots: 
-
