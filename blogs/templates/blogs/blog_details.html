@@ -1,0 +1,125 @@
+{% extends 'index.html' %}
+{% load urlify %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+|  {{ blog.title }}
+{% endblock title %}
+
+{% block blog_detail_link %}
+<li><a href="{{ blog.get_absolute_url }}">{{ blog.title | title}}</a></li>
+{% endblock blog_detail_link%}
+
+{% block content %}
+<div class="container">
+    <div class="col-sm-10 col-sm-offset-1">
+
+        <h1>{{ blog.title | title }}
+            <small> {{ blog.updated | timesince }} ago, by {{ blog.author}} , {{ blog.viewedCount }} viewed
+            </small>
+        </h1>
+
+        <p> Read time: {{ blog.readtime }} </p>
+
+        <!--<p>-->
+        <!--&lt;!&ndash;socal link&ndash;&gt;-->
+        <!--<a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}"> Facebook-->
+        <!--</a>-->
+        <!--<a href="https://twitter.com/home?status={{ blog.title|urlify }}%20{{ request.build_absolute_uri }}">-->
+        <!--Twitter-->
+        <!--</a>-->
+        <!--<a href='https://plus.google.com/share?url={{ request.build_absolute_uri }}'>Google Plus</a>-->
+        <!--<a href="https://www.linkedin.com/shareArticle?mini=true&url={{ request.build_absolute_uri }}&title={{ blog.title }}&source=http://swiftforentrepreneurs.com/">-->
+        <!--Linkedin-->
+        <!--</a>-->
+        <!--</p>-->
+
+        <!-- cover img-->
+        {% if blog.coverimg %}
+        <img class="img-responsive" src="{{ blog.coverimg.url }}">
+        <br>
+        {% endif %}
+        <p>
+        <div class="fb-like" data-href="{{ request.build_absolute_uri }}" data-layout="button_count"
+             data-action="like" data-size="small" data-show-faces="false" data-share="true"></div>
+        </p>
+
+        <!--# content -->
+        <div class="row">
+            <!--<div class="col-sm-10 col-sm-offset-2 content-markdown">-->
+            <!--{{ blog.content }} <br/>-->
+            <!--</div>-->
+
+            <!--another way to display markdown -->
+            <div class="col-sm-10 col-sm-offset-2">
+                {{ blog.get_mark_down }}
+            </div>
+
+            <br/>
+            <br/>
+            <hr/>
+
+            {% if request.user.is_authenticated %}
+            <form method="POST" action=".">
+                {% csrf_token %}
+                {{ comments_form | crispy }}
+                <input type="submit" value="Post Comment" class="btn btn-default">
+            </form>
+            {% else %}
+            <p> You must login to comment </p>
+            {% endif %}
+
+
+            <p class="lead">Comments</p>
+            <hr/>
+            {% for comment in comments %}
+            <blockquote>
+                <p>{{ comment.content }}</p>
+                <footer> via {{ comment.user }} | {{ comment.timestamp | timesince }} ago |
+                    {% if comment.children.count > 0 %} {{ comment.children.count }} comment {% if comment.children.count > 1 %}s{% endif %} | {% endif %}
+                    <a class="comment-reply-btn" href="#">Reply</a> | <a href="{{ comment.get_absolute_url }}">Thread</a>
+                    {% if request.user == comment.user %}
+                    | <a href="{{ comment.get_delete_url }}"> Delete</a>
+                    {% endif %}
+                </footer>
+
+                <!--comment replies-->
+                <div class="comment-reply">
+                    {% for child_comment in comment.children %}
+                    <blockquote>
+                        <p>{{ child_comment.content }}</p>
+                        <footer> via {{ child_comment.user }} | {{ child_comment.timestamp | timesince }} ago
+                            {% if request.user == comment.user %}
+                            | <a {{ child_comment.get_delete_url }}> Delete</a>
+                            {% endif %}
+                        </footer>
+                    </blockquote>
+
+                    {% endfor %}
+
+                    {% if request.user.is_authenticated %}
+                    <form method="POST" action=".">
+                        {% csrf_token %}
+                        {{ comments_form | crispy }}
+                        <input type="hidden" name="parent_id" value="{{ comment.id }}">
+                        <input type="submit" value="Reply" class="btn btn-default">
+                    </form>
+                    {% else %}
+                                <p> You must login to comment </p>
+
+                    {% endif %}
+                </div>
+                <!--comment replies-->
+
+            </blockquote>
+            <hr/>
+
+            {% endfor %}
+
+            <!--<div class="container fb-comments col-sm-10 col-sm-offset-1" data-href="{{ request.build_absolute_uri }}"-->
+            <!--data-numposts="5"></div>-->
+        </div>
+    </div>
+</div>
+</div>
+{% endblock content %}

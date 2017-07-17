@@ -1,0 +1,135 @@
+<!DOCTYPE HTML>
+
+{% load static %}
+
+<html>
+<head>
+
+    <title>
+        Nicolas XU
+        {% block title %}
+        {% endblock title %}
+    </title>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+          integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+
+    <!--font awesome-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" >
+
+
+    <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
+
+    <style>
+        {% block style %}
+        {% endblock style %}
+    </style>
+
+    {% block head_extra %}
+    {% endblock head_extra %}
+
+</head>
+
+<body>
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.9";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
+</script>
+
+<!--nav bar-->
+<div class="container">
+    <ol class="breadcrumb">
+        <li><a href="{% url 'blogs:blogs_index' %}">Home</a></li>
+        <li><a href="{% url 'blogs:blogs_index' %}">Blogs</a></li>
+        {% block blog_detail_link %}
+        {% endblock blog_detail_link %}
+
+        {% if not request.user.is_authenticated %}
+        <li class="pull-right"><a href="{% url 'accounts:login_view'  %}">Login</a></li>
+        <li class="pull-right"><a href="{% url 'accounts:register_view'  %}">Register</a></li>
+        {% else %}
+        <li class="pull-right"><a href="{% url 'accounts:logout_view'  %}">Logout</a></li>
+        <li class="pull-right"> Welcome {{ request.user.username|title }} !</li>
+        {% endif %}
+    </ol>
+</div>
+
+
+
+<div class="container">
+    {% block content %}
+
+    {% endblock content %}
+</div>
+
+<!-- Latest jquery-->
+<script src="https://code.jquery.com/jquery-3.2.1.js"></script>
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.6/marked.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $(".content-markdown").each(function(){
+            var content= $(this).text().trim()
+            var markedContent = marked(content)
+            $(this).html(markedContent)
+        })
+        // if img attitribute, need to add img-responsive for it
+        $(".content-markdown img").each(function(){
+               $(this).addClass("img-responsive");
+        })
+
+        <!--blog title-->
+        function set_blog_title_preview(val)
+        {
+            $("#blog_title").text(val)
+        }
+        set_blog_title_preview($("#id_title").val())
+
+        $("#id_title").keyup(function(){
+            var content = $(this).val()
+            $("#blog_title").text(content)
+        })
+
+        <!--blog content-->
+        function set_blog_content_preview(val)
+        {
+            var markedcontent = marked(val)
+            $("#blog_content").html(markedcontent)
+            $("#blog_content img").each(function(){
+                $(this).addClass("img-responsive")
+            })
+        }
+        set_blog_content_preview($("#id_content").val())
+        $("#id_content").keyup(function(){
+            var content = $(this).val()
+            set_blog_content_preview(content)
+        })
+
+        $(".comment-reply-btn").click(function(event){
+            event.preventDefault();
+            $(this).parent().next(".comment-reply").fadeToggle();
+        })
+
+
+    })
+</script>
+</body>
+</html>

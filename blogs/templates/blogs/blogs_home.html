@@ -1,0 +1,64 @@
+{% extends 'index.html' %}
+
+
+{% block title %}
+
+| blogs
+
+{% endblock title %}
+
+
+{% block content %}
+
+<div class="col-sm-8 col-sm-offset-2">
+
+    <!--<form method="GET" action="">-->
+        <!--<input type="text" name="q" placeholder="Search blogs" value="{{ request.GET.q }}"/>-->
+        <!--<input type="submit" value="Search"/>-->
+    <!--</form>-->
+    <!--<hr/>-->
+    <!--<br>-->
+
+    <div class="row">
+        {% for blog in blogs %}
+        <div class="col-sm-12">
+            <div class="thumbnail">
+                {% if blog.coverimg %}
+                    <img class="img-responsive" src="{{ blog.coverimg.url }}">
+                {% endif %}
+                <div class="caption">
+                    <h3><a href=' {{ blog.get_absolute_url }}'>
+                        {{ blog.title | title }}
+                        <small>{{ blog.updated | timesince }} ago, by {{ blog.author }} </small>
+                    </a></h3>
+                    <p class="content-markdown">
+                        {{ blog.content}}
+                    </p>
+                    <p><a href="{{ blog.get_absolute_url }}" class="btn btn-primary" role="button">View</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+        <!--# pagination-->
+        <div class="pagination">
+            <span class="step-links">
+                {% if blogs.has_previous %}
+                    <a href="?page={{ blogs.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">previous</a>
+                {% endif %}
+
+                <span class="current">
+                    Page {{ blogs.number }} of {{ blogs.paginator.num_pages }}.
+                </span>
+
+                {% if blogs.has_next %}
+                    <a href="?page={{ blogs.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">next</a>
+                {% endif %}
+            </span>
+        </div>
+
+    </div>
+    <hr/>
+</div>
+
+{% endblock content %}

@@ -1,0 +1,17 @@
+
+<div class="container">
+    <ol class="breadcrumb">
+        <li><a href="{% url 'blogs:blogs_index' %}">Home</a></li>
+        <li><a href="{% url 'blogs:blogs_index' %}">Blogs</a></li>
+        {% block blog_detail_link %}
+        {% endblock blog_detail_link %}
+
+        {% if not request.user.is_authenticated %}
+        <li class="pull-right"><a href="{% url 'accounts:login_view'  %}">Login</a></li>
+        <li class="pull-right"><a href="{% url 'accounts:register_view'  %}">Register</a></li>
+        {% else %}
+        <li class="pull-right"><a href="{% url 'accounts:logout_view'  %}">Logout</a></li>
+        <li class="pull-right"> Welcome {{ request.user.username|title }} !</li>
+        {% endif %}
+    </ol>
+</div>

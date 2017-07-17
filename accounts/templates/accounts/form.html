@@ -1,0 +1,17 @@
+{% extends 'index.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+
+<div class="col-sm-6 col-sm-offset-3">
+    <h2> {{ title }}</h2>
+    <hr/>
+
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form | crispy }}
+        <input type="submit" class="btn btn-success" value="{{ title }}"/>
+    </form>
+</div>
+{% endblock content %}
