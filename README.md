@@ -1,6 +1,9 @@
-Brief summary:
+Travis CI Unit Test Result: [![Build Status](https://travis-ci.org/elfprincexu/DjangoWebsite.svg?branch=master)](https://travis-ci.org/elfprincexu/DjangoWebsite)
 
-snapshots: 
+
+## Brief summary:
+
+### snapshots: 
 
 ![Alt text](screenshots/home.png "Home Page")
 
@@ -11,7 +14,7 @@ snapshots:
   2. Use bootstrap, jqeury, javascript, pagedown to render the Layout
   3. Use permission control, comments deletion/post need login and correct permission
 
-Installation: 
+#### Installation: 
   1. git clone or download this project
   2. cd to the project folder (top level)
   3. virtualenv .env
@@ -21,7 +24,7 @@ Installation:
   8. loginto "localhost:8000/blogs" to see blogs  
 
   
-Url mappings:
+#### Url mappings:
   1.    /                 ------------ home
   2.    /blogs            ------------ home
   3.    /blogs/[1-9]+   -------------- blog details
