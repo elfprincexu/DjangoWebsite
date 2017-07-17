@@ -1,8 +1,5 @@
 Travis CI Unit Test Result: [![Build Status](https://travis-ci.org/elfprincexu/DjangoWebsite.svg?branch=master)](https://travis-ci.org/elfprincexu/DjangoWebsite)
 
-
-## Brief summary:
-
 ### snapshots: 
 
 #### Home Page
@@ -11,7 +8,7 @@ Travis CI Unit Test Result: [![Build Status](https://travis-ci.org/elfprincexu/D
 #### Login Page
 ![Alt text](screenshots/login.png "login Page")
 
-
+### Brief summary:
 
   **1. A basic blog Django project, which enables**
         * Create/View/Edit/Delete Blogs.
