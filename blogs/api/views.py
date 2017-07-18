@@ -12,6 +12,11 @@ from rest_framework.permissions import (
     IsAdminUser,
     IsAuthenticatedOrReadOnly,
 )
+from django.db.models import Q
+from rest_framework.filters import (
+    SearchFilter,
+    OrderingFilter,
+)
 
 from .permissions import IsOwnerOrReadyOnly
 
@@ -54,7 +59,21 @@ class BlogDeleteAPIView(DestroyAPIView):
 
 
 class BlogListAPIView(ListAPIView):
-    queryset = Blog.objects.all()
+    # queryset = Blog.objects.all()
     serializer_class = BlogSerializer
+    filter_backends = [SearchFilter,OrderingFilter]
+    search_fields = ['title','content','author__first_name', 'author__last_name']
+    ordering_fields = ['title','updated']
 
-    # def get_serializer_class(self):
+    def get_queryset(self, *args, **kwargs):
+        # queryset_list = super(BlogListAPIView,self).get_queryset(*args, **kwargs)
+        queryset_list = Blog.objects.all()
+        query = self.request.GET.get('q')
+        if query:
+            queryset_list = queryset_list.filter(
+                Q(title__icontains=query) |
+                Q(content__icontains=query) |
+                Q(author__first_name__icontains=query) |
+                Q(author__last_name__icontains=query)
+            ).distinct()
+        return queryset_list
