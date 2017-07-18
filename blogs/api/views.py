@@ -18,6 +18,7 @@ from rest_framework.filters import (
     OrderingFilter,
 )
 
+from .pagination import BlogLimitOffsetPagination,BlogPageNumberPagination
 from .permissions import IsOwnerOrReadyOnly
 
 from blogs.models import Blog
@@ -64,6 +65,7 @@ class BlogListAPIView(ListAPIView):
     filter_backends = [SearchFilter,OrderingFilter]
     search_fields = ['title','content','author__first_name', 'author__last_name']
     ordering_fields = ['title','updated']
+    pagination_class = BlogPageNumberPagination
 
     def get_queryset(self, *args, **kwargs):
         # queryset_list = super(BlogListAPIView,self).get_queryset(*args, **kwargs)
