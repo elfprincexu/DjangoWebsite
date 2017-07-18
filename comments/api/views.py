@@ -23,8 +23,7 @@ from blogs.api.pagination import BlogLimitOffsetPagination, BlogPageNumberPagina
 from blogs.api.permissions import IsOwnerOrReadyOnly
 
 from comments.models import Comment
-from comments.api.serializers import CommentDetailSerializer
-
+from comments.api.serializers import CommentSerializer, CommentDetailSerializer
 
 
 class CommentDetailAPIView(RetrieveAPIView):
@@ -34,12 +33,11 @@ class CommentDetailAPIView(RetrieveAPIView):
     lookup_url_kwarg = "id"
 
 
-
 class CommentListAPIView(ListAPIView):
     # queryset = Blog.objects.all()
-    serializer_class = CommentDetailSerializer
+    serializer_class = CommentSerializer
     filter_backends = [SearchFilter, OrderingFilter]
-    search_fields = [ 'content', 'user__first_name', 'user__last_name']
+    search_fields = ['content', 'user__first_name', 'user__last_name']
     ordering_fields = ['updated']
     pagination_class = BlogPageNumberPagination
 

@@ -7,24 +7,53 @@ from rest_framework.serializers import (
 from comments.models import Comment
 
 
-class CommentDetailSerializer(ModelSerializer):
+class CommentSerializer(ModelSerializer):
+
+    replies_count = SerializerMethodField()
+
+    def get_replies_count(self, obj):
+        if obj.is_parent:
+            return obj.children().count()
+        return 0
+
     class Meta:
         model = Comment
-
         fields = [
             'id',
-            'user',
             'content_type',
             'object_id',
-            'content',
+            # 'content_object',
             'parent',
+            'content',
+            'replies_count',
+            'timestamp',
         ]
 
 
-class CommentListSerializer(ModelSerializer):
+class CommentChildSerializer(ModelSerializer):
 
+    class Meta:
+        model = Comment
+        fields = [
+            'id',
+            'content',
+            'parent',
 
+        ]
 
+class CommentDetailSerializer(ModelSerializer):
+    replies_count = SerializerMethodField()
+    replies = SerializerMethodField()
+
+    def get_replies_count(self,obj):
+        if obj.is_parent:
+            return obj.children().count()
+        return 0
+
+    def get_replies(self, obj):
+        if obj.is_parent:
+            return CommentChildSerializer(obj.children(), many=True).data
+        return None
 
     class Meta:
         model = Comment
@@ -33,6 +62,7 @@ class CommentListSerializer(ModelSerializer):
             'user',
             'object_id',
             'content',
-            'parent',
-
+            'replies_count',
+            'replies',
+            'timestamp',
         ]
