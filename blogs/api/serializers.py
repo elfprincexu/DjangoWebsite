@@ -6,6 +6,9 @@ from rest_framework.serializers import (
 
 from blogs.models import Blog
 
+from comments.api.serializers import CommentSerializer
+from comments.models import Comment
+
 
 class BlogCreateSerializer(ModelSerializer):
     class Meta:
@@ -62,6 +65,14 @@ class BlogDetailSerializer(ModelSerializer):
     author = SerializerMethodField()
     coverimg = SerializerMethodField()
     html = SerializerMethodField()
+    comments = SerializerMethodField()
+
+    def get_comments(self,obj):
+        content_type = obj.get_content_type
+        obj_id = obj.id
+        c_qs = Comment.objects.filter_by_instance(obj)
+        return CommentSerializer(c_qs, many= True).data
+
 
     def get_author(self, obj):
         return str(obj.author.username)
@@ -88,6 +99,7 @@ class BlogDetailSerializer(ModelSerializer):
             'html',
             'updated',
             'coverimg',
+            'comments',
         ]
 
 
