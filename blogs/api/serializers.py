@@ -7,6 +7,18 @@ class BlogSerializer(ModelSerializer):
         model = Blog
 
         fields = [
+            'title',
+            'author',
+            'slug',
+            'content',
+            'updated',
+        ]
+
+class BlogDetailSerializer(ModelSerializer):
+    class Meta:
+        model = Blog
+
+        fields = [
             'id',
             'title',
             'author',
@@ -14,6 +26,8 @@ class BlogSerializer(ModelSerializer):
             'content',
             'updated',
         ]
+
+
 
 
 """
