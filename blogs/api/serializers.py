@@ -9,7 +9,7 @@ class BlogCreateSerializer(ModelSerializer):
 
         fields = [
             'title',
-            'author',
+            # 'author',
             # 'slug',
             'content',
             'updated',

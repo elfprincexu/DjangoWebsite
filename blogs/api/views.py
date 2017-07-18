@@ -15,6 +15,10 @@ class BlogCreateAPIView(CreateAPIView):
     lookup_field = 'slug'
     lookup_url_kwarg = "slug"
 
+    def perform_create(self, serializer):
+        serializer.save(author= self.request.user)
+
+
 class BlogDetailAPIView(RetrieveAPIView):
     queryset = Blog.objects.all()
     serializer_class = BlogDetailSerializer

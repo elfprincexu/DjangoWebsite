@@ -6,6 +6,7 @@ from comments.models import Comment
 from django.contrib.contenttypes.models import ContentType
 from django.utils.safestring import mark_safe
 from markdown_deux import markdown
+from django.contrib.auth import settings
 
 
 # Create your models here.
@@ -28,7 +29,7 @@ def upload_location(instance, filename):
 class Blog(models.Model):
     # Blog content: title, author, context
     title = models.CharField(max_length=120)
-    author = models.ForeignKey(Author, on_delete=models.CASCADE)
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, default=1)
     content = models.TextField(null=True, blank=True)
     # Blog slug url for better
     slug = models.SlugField(blank=True, unique=True)
