@@ -1,4 +1,8 @@
-from rest_framework.serializers import ModelSerializer, HyperlinkedIdentityField
+from rest_framework.serializers import (
+    ModelSerializer,
+    HyperlinkedIdentityField,
+    SerializerMethodField,
+)
 
 from blogs.models import Blog
 
@@ -25,6 +29,21 @@ class BlogListSerializer(ModelSerializer):
         lookup_field='slug',
     )
 
+    author = SerializerMethodField()
+
+    coverimg = SerializerMethodField()
+
+
+    def get_author(self, obj):
+        return str(obj.author.username)
+
+    def get_coverimg(self,obj):
+        try:
+            image = obj.coverimg.url
+        except:
+            image = None
+        return image
+
     class Meta:
         model = Blog
 
@@ -35,10 +54,28 @@ class BlogListSerializer(ModelSerializer):
             'author',
             'content',
             'updated',
+            'coverimg',
         ]
 
 
 class BlogDetailSerializer(ModelSerializer):
+    author = SerializerMethodField()
+    coverimg = SerializerMethodField()
+    html = SerializerMethodField()
+
+    def get_author(self, obj):
+        return str(obj.author.username)
+
+    def get_coverimg(self, obj):
+        try:
+            image = obj.coverimg.url
+        except:
+            image = None
+        return image
+
+    def get_html(self,obj):
+        return obj.get_mark_down()
+
     class Meta:
         model = Blog
 
@@ -48,7 +85,9 @@ class BlogDetailSerializer(ModelSerializer):
             'author',
             'slug',
             'content',
+            'html',
             'updated',
+            'coverimg',
         ]
 
 
