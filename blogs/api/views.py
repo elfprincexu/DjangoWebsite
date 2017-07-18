@@ -3,11 +3,17 @@ from rest_framework.generics import (
     RetrieveAPIView,
     DestroyAPIView,
     UpdateAPIView,
+    CreateAPIView,
 )
 
 from blogs.models import Blog
-from blogs.api.serializers import BlogSerializer, BlogDetailSerializer
+from blogs.api.serializers import BlogSerializer, BlogDetailSerializer,BlogCreateSerializer
 
+class BlogCreateAPIView(CreateAPIView):
+    queryset = Blog.objects.all()
+    serializer_class = BlogCreateSerializer
+    lookup_field = 'slug'
+    lookup_url_kwarg = "slug"
 
 class BlogDetailAPIView(RetrieveAPIView):
     queryset = Blog.objects.all()
