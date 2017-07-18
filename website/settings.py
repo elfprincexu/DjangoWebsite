@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     # third apps
     'crispy_forms',
     'pagedown',
+    'rest_framework',
+
     # customer apps
     'comments',
     'blogs',

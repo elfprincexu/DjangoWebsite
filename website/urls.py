@@ -27,8 +27,11 @@ urlpatterns = [
     # url(r'^blogs/$', blogs_home, name = "blogs_index"),
     # url(r'^blogs/(?P<blog_id>\w+)/$', blog_details, name = "blog_detail")
     url(r'^blogs/', include('blogs.urls', namespace="blogs")),
+    url(r'^api/blogs/', include('blogs.api.urls', namespace="blogs-api")),
+
     url(r'^comments/', include('comments.urls', namespace="comments")),
     url(r'^accounts/', include('accounts.urls', namespace="accounts")),
+
 
     url(r'^$', blogs_home)
 ]
