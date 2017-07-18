@@ -22,7 +22,7 @@ from .pagination import BlogLimitOffsetPagination,BlogPageNumberPagination
 from .permissions import IsOwnerOrReadyOnly
 
 from blogs.models import Blog
-from blogs.api.serializers import BlogSerializer, BlogDetailSerializer, BlogCreateSerializer
+from blogs.api.serializers import BlogListSerializer, BlogDetailSerializer, BlogCreateSerializer
 
 
 class BlogCreateAPIView(CreateAPIView):
@@ -61,7 +61,7 @@ class BlogDeleteAPIView(DestroyAPIView):
 
 class BlogListAPIView(ListAPIView):
     # queryset = Blog.objects.all()
-    serializer_class = BlogSerializer
+    serializer_class = BlogListSerializer
     filter_backends = [SearchFilter,OrderingFilter]
     search_fields = ['title','content','author__first_name', 'author__last_name']
     ordering_fields = ['title','updated']

@@ -1,4 +1,4 @@
-from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import ModelSerializer, HyperlinkedIdentityField
 
 from blogs.models import Blog
 
@@ -9,23 +9,34 @@ class BlogCreateSerializer(ModelSerializer):
 
         fields = [
             'title',
-            # 'author',
-            # 'slug',
             'content',
             'updated',
         ]
 
-class BlogSerializer(ModelSerializer):
+
+class BlogListSerializer(ModelSerializer):
+    url = HyperlinkedIdentityField(
+        view_name='blogs-api:detail',
+        lookup_field='slug',
+    )
+
+    delete_url = HyperlinkedIdentityField(
+        view_name='blogs-api:delete',
+        lookup_field='slug',
+    )
+
     class Meta:
         model = Blog
 
         fields = [
+            'url',
+            'delete_url',
             'title',
             'author',
-            'slug',
             'content',
             'updated',
         ]
+
 
 class BlogDetailSerializer(ModelSerializer):
     class Meta:
@@ -39,8 +50,6 @@ class BlogDetailSerializer(ModelSerializer):
             'content',
             'updated',
         ]
-
-
 
 
 """
