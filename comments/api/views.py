@@ -7,6 +7,8 @@ from rest_framework.generics import (
     RetrieveUpdateAPIView,
 )
 
+from rest_framework.mixins import DestroyModelMixin, UpdateModelMixin
+
 from rest_framework.permissions import (
     IsAuthenticated,
     IsAdminUser,
@@ -23,7 +25,25 @@ from blogs.api.pagination import BlogLimitOffsetPagination, BlogPageNumberPagina
 from blogs.api.permissions import IsOwnerOrReadyOnly
 
 from comments.models import Comment
-from comments.api.serializers import CommentSerializer, CommentDetailSerializer, create_comment_serializer
+from comments.api.serializers import (
+    CommentSerializer,
+    CommentDetailSerializer,
+    create_comment_serializer,
+)
+
+
+class CommentDetailAPIView(DestroyModelMixin, UpdateModelMixin, RetrieveAPIView):
+    queryset = Comment.objects.filter(id__gte=0)
+    serializer_class = CommentDetailSerializer
+    lookup_field = 'id'
+    lookup_url_kwarg = 'id'
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
+
 
 
 class CommentCreateAPIView(CreateAPIView):
@@ -44,12 +64,6 @@ class CommentCreateAPIView(CreateAPIView):
             user=self.request.user
         )
 
-
-class CommentDetailAPIView(RetrieveAPIView):
-    queryset = Comment.objects.all()
-    serializer_class = CommentDetailSerializer
-    lookup_field = 'id'
-    lookup_url_kwarg = "id"
 
 
 class CommentListAPIView(ListAPIView):
