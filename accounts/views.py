@@ -68,5 +68,9 @@ def register_view(request):
 
 def logout_view(request):
     logout(request)
+
+    next = request.GET.get("next")
+    if next:
+        return redirect(next)
     #redirect
     return redirect("blogs:blogs_index")

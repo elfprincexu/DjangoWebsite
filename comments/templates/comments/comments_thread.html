@@ -36,7 +36,7 @@
                         <input type="submit" value="Reply" class="btn btn-default">
                     </form>
                     {% else %}
-                    <p>you must login to comment</p>
+                        <a href="{% url 'accounts:login_view' %}?next={{request.path}}">Login To Comment</a>
                     {% endif %}
 
                 </div>
