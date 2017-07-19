@@ -57,10 +57,10 @@
         {% endblock blog_detail_link %}
 
         {% if not request.user.is_authenticated %}
-        <li class="pull-right"><a href="{% url 'accounts:login_view'  %}">Login</a></li>
-        <li class="pull-right"><a href="{% url 'accounts:register_view'  %}">Register</a></li>
+        <li class="pull-right"><a href="{% url 'accounts:login_view'  %}?next={{request.path}}">Login</a></li>
+        <li class="pull-right"><a href="{% url 'accounts:register_view'  %}?next={{request.path}}">Register</a></li>
         {% else %}
-        <li class="pull-right"><a href="{% url 'accounts:logout_view'  %}">Logout</a></li>
+        <li class="pull-right"><a href="{% url 'accounts:logout_view'  %}?next={{request.path}}">Logout</a></li>
         <li class="pull-right"> Welcome {{ request.user.username|title }} !</li>
         {% endif %}
     </ol>

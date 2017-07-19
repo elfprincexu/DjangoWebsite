@@ -9,6 +9,7 @@ from django.shortcuts import reverse
 # Create your models here.
 
 class CommentManager(models.Manager):
+
     def all(self):
         qs = super(CommentManager, self).filter(parent=None)
         return qs

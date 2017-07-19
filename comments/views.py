@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
-@login_required()       #setting LOGIN_URL
+@login_required()  # setting LOGIN_URL
 def comment_delete(request, id):
     comment = get_object_or_404(Comment, id=id)
 
@@ -25,10 +25,10 @@ def comment_delete(request, id):
         return HttpResponseRedirect(parent_obj_url)
 
     context = {
-        "comment" : comment,
+        "comment": comment,
     }
 
-    return render(request,"comments/comment_delete.html", context)
+    return render(request, "comments/comment_delete.html", context)
 
 
 def comments_thread(request, id):
