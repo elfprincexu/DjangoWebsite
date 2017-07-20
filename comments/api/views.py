@@ -20,9 +20,8 @@ from rest_framework.filters import (
     SearchFilter,
     OrderingFilter,
 )
-
-from blogs.api.pagination import BlogLimitOffsetPagination, BlogPageNumberPagination
-from blogs.api.permissions import IsOwnerOrReadyOnly
+from comments.api.pagination import CommentPageNumberPagination
+from comments.api.permissions import IsOwnerOrReadyOnly
 
 from comments.models import Comment
 from comments.api.serializers import (
@@ -37,6 +36,8 @@ class CommentDetailAPIView(DestroyModelMixin, UpdateModelMixin, RetrieveAPIView)
     serializer_class = CommentDetailSerializer
     lookup_field = 'id'
     lookup_url_kwarg = 'id'
+
+    permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadyOnly]
 
     def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
@@ -72,7 +73,7 @@ class CommentListAPIView(ListAPIView):
     filter_backends = [SearchFilter, OrderingFilter]
     search_fields = ['content', 'user__first_name', 'user__last_name']
     ordering_fields = ['updated']
-    pagination_class = BlogPageNumberPagination
+    pagination_class = CommentPageNumberPagination
 
     def get_queryset(self, *args, **kwargs):
         # queryset_list = super(BlogListAPIView,self).get_queryset(*args, **kwargs)
